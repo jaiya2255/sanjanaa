@@ -1,34 +1,40 @@
 const express = require('express');
-const product = require("./database/models/product");
-const Manufactures = require("./database/models/Manufacturing");
-const Categories = require("./database/models/Categories");
-const Properties = require("./database/models/Properties")
-const router = express.Router();
+const products = require("./src/database/models/product");
+const Manufacture=require("./src/database/models/Manufacturing");
+const Category=require("./src/database/models/Categories");
+const Properties=require("./src/database/models/Properties");
+const router =express.Router();
 
-router.get("/",(req, res) => {
-    Product.findAll({
-        include: [{model:Manufactures}]
-    }).then(res1 => {
+router.get('/',(req, res) => {
+    products.findall({
+        include: [{model:Manufacture}]
+    }) .then(res1 =>{
         res.json(res1);
     });
 });
-
-router.post("/",(req, res) => {
-    if(req.body !==null){
+router.post('/',(req, res) => {
+if(req.body !=null){
     console.log(req.body);
     let newPdt = {
-        NAME: req.body.name,
-        PRICE:req.body.price
+        name:req.body.name,
+        price:req.body.price
     };
-    let newManu = req.body.Manufactures
-    Product.create(newPdt).then(pdt => {
-        Manufactures.findone({where: {id :newManu}}).then(res.resManu)
-        pdt.setManufacturess(newManu).then(() => {
-            console.log("saved");
-        })
+   let newmanu=req.body.manufacture;
+    products.create(newPdt).then(pdt => {
+        Manufacture.findOne({where:{id:newmanu}}).then(resmanu =>{
+            pdt.setManufactures(resmanu);
+                console.log("saved");
+        });
+      
+        
     });
-    }
-    res.json({status: "executed"})
+}
+  res.json({status:"executed"});
 });
+router.post("/manufacture",(req,res)=> {
+    if(req.body != null){
+        console.log(req.body);
+    }
+})
 
-
+module.exports = router;
